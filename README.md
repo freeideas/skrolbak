@@ -1,19 +1,20 @@
-# Logix: Animated Login Form
+# Logix: Animated Background Component
 
-A Flutter web app featuring a glassmorphic login form with a continuously scrolling animated background.
+A Web Component featuring an infinite tiled background with organic camera motion across six degrees of freedom.
+
+## Usage
+
+```html
+<script src="animated-background.js"></script>
+<animated-background src="bg.jpg"></animated-background>
+```
 
 ## Build
 
-Uses [the-system](./the-system/README.md) for AI-driven software construction.
-
-```bash
-./the-system/software-construction.sh
-```
-
-Output appears in `./released/`.
+Run `./code/build.py` to copy source to `./released/logix/`.
 
 ## Specifications
 
-- [Login Form](./specs/LOGIN_FORM.md)
-- [Animated Background](./specs/ANIMATED_BACKGROUND.md)
-- [Testing](./specs/TESTING.md)
+- [Animated Background](./specs/ANIMATED_BACKGROUND.md) - Component behavior and rendering
+- [Demo](./specs/DEMO.md) - Test overlay
+- [Testing](./specs/TESTING.md) - Visual verification

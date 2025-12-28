@@ -6,100 +6,49 @@
 
 import sys
 import os
-import subprocess
 import shutil
-from pathlib import Path
 
 # Fix Windows console encoding for Unicode characters
 if sys.stdout.encoding != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
     sys.stderr.reconfigure(encoding='utf-8')
 
-# $REQ_BUILD_001: Build script paths
-SCRIPT_DIR = Path(__file__).parent.absolute()
-PROJECT_ROOT = SCRIPT_DIR.parent
-FLUTTER_BIN = PROJECT_ROOT / "tools" / "compiler" / "flutter" / "bin" / "flutter"
-ASSETS_DIR = PROJECT_ROOT / "extart"
-CODE_ASSETS_DIR = SCRIPT_DIR / "assets"
-RELEASED_DIR = PROJECT_ROOT / "released"
-
-def print_step(message):
-    """Print a build step message"""
-    print(f"• {message}")
-
-def run_command(cmd, cwd=None):
-    """Run a command and return exit code"""
-    result = subprocess.run(
-        cmd,
-        cwd=cwd or SCRIPT_DIR,
-        text=True,
-        encoding='utf-8',
-        capture_output=True
-    )
-    if result.stdout:
-        print(result.stdout, end='')
-    if result.stderr:
-        print(result.stderr, end='', file=sys.stderr)
-    return result.returncode
-
 def main():
-    print_step("Starting build process...")
+    print("Building Logix: Animated Background Component...")
 
-    # $REQ_BUILD_002: Copy background image to assets directory
-    print_step("Copying assets...")
-    CODE_ASSETS_DIR.mkdir(exist_ok=True)
-    bg_source = ASSETS_DIR / "bg.jpg"
-    bg_dest = CODE_ASSETS_DIR / "bg.jpg"
+    # Determine paths
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    release_dir = os.path.join(project_root, 'released', 'logix')
 
-    if not bg_source.exists():
-        print(f"✗ Error: Background image not found at {bg_source}", file=sys.stderr)
-        return 1
+    # Create release directory
+    print(f"Creating release directory: {release_dir}")
+    os.makedirs(release_dir, exist_ok=True)
 
-    shutil.copy2(bg_source, bg_dest)
-    print(f"  Copied {bg_source} → {bg_dest}")
+    # Files to copy
+    files = [
+        'animated-background.js',
+        'index.html',
+        'bg.jpg'
+    ]
 
-    # Run flutter pub get
-    print_step("Getting Flutter dependencies...")
-    ret = run_command([str(FLUTTER_BIN), "pub", "get"])
-    if ret != 0:
-        print("✗ Failed to get dependencies", file=sys.stderr)
-        return ret
+    # Copy each file
+    for filename in files:
+        src = os.path.join(script_dir, filename)
+        dst = os.path.join(release_dir, filename)
 
-    # Build for web
-    print_step("Building Flutter web app...")
-    ret = run_command([
-        str(FLUTTER_BIN),
-        "build",
-        "web",
-        "--release",
-        "--web-renderer",
-        "canvaskit"
-    ])
-    if ret != 0:
-        print("✗ Build failed", file=sys.stderr)
-        return ret
+        if not os.path.exists(src):
+            print(f"✗ Error: Source file not found: {src}")
+            return 1
 
-    # Copy build output to ./released/
-    print_step("Copying artifacts to ./released/...")
-    build_output = SCRIPT_DIR / "build" / "web"
+        print(f"Copying {filename}...")
+        shutil.copy2(src, dst)
+        print(f"  ✓ {filename} -> released/logix/")
 
-    if not build_output.exists():
-        print(f"✗ Error: Build output not found at {build_output}", file=sys.stderr)
-        return 1
-
-    # Clean and recreate released directory
-    if RELEASED_DIR.exists():
-        shutil.rmtree(RELEASED_DIR)
-    RELEASED_DIR.mkdir(parents=True)
-
-    # Copy all web build files
-    shutil.copytree(build_output, RELEASED_DIR, dirs_exist_ok=True)
-    print(f"  Copied {build_output} → {RELEASED_DIR}")
-
-    print_step("✓ Build completed successfully!")
-    print(f"\nArtifacts available in: {RELEASED_DIR}")
-
+    print("\n✓ Build complete!")
+    print(f"  Output: {release_dir}")
+    print(f"  Files: {', '.join(files)}")
     return 0
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sys.exit(main())

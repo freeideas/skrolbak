@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logix: Animated Background Demo</title>
+  <style>
+    /* Glassmorphic form styling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* $REQ_DEMO-FORM_001, $REQ_DEMO-FORM_007: Center form in viewport, remains stationary */
+    .form-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;  /* $REQ_DEMO-FORM_005: Z-index layering */
+    }
+
+    /* $REQ_DEMO-FORM_002: Hot-pink 50% opaque glassmorphic form */
+    /* $REQ_DEMO-FORM_006: Blur effect with moving background */
+    .glassmorphic-form {
+      background: rgba(255, 105, 180, 0.5);  /* $REQ_DEMO-FORM_002: Hot-pink 50% opaque */
+      backdrop-filter: blur(10px);  /* $REQ_DEMO-FORM_002, $REQ_DEMO-FORM_006: Glassmorphic blur */
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 40px;
+      width: 320px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      /* Ensure proper stacking context for backdrop-filter */
+      isolation: isolate;
+    }
+
+    .glassmorphic-form h2 {
+      margin: 0 0 24px 0;
+      color: white;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: white;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-group input[type="text"]::placeholder,
+    .form-group input[type="password"]::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="password"]:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .checkbox-group label {
+      color: white;
+      font-size: 14px;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit-button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <!-- $REQ_DEMO-FORM_004: Animated background component -->
+  <animated-background src="bg.jpg"></animated-background>
+
+  <!-- $REQ_DEMO-FORM_001-008: Glassmorphic login form -->
+  <div class="form-container">
+    <form class="glassmorphic-form">
+      <h2>Welcome Back</h2>  <!-- $REQ_DEMO-FORM_003: Form heading -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username">  <!-- $REQ_DEMO-FORM_003: Input field -->
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="remember">  <!-- $REQ_DEMO-FORM_003: Checkbox -->
+        <label for="remember">Remember me</label>
+      </div>
+      <button type="button" class="submit-button">Sign In</button>  <!-- $REQ_DEMO-FORM_003, $REQ_DEMO-FORM_008: Button, display only -->
+    </form>
+  </div>
+
+  <script src="animated-background.js"></script>
+</body>
+</html>

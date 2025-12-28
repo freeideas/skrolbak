@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #test-content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: white;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <animated-background src="bg.jpg"></animated-background>
+  <div id="test-content">Test Content</div>
+  <script src="animated-background.js"></script>
+</body>
+</html>

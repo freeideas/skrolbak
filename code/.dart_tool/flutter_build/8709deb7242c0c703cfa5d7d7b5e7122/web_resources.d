@@ -1,1 +1,0 @@
- build/web/manifest.json build/web/icons/Icon-192.png build/web/icons/Icon-512.png:  /home/ace/prjx/logix/tmp/03_visual-testing/code/web/manifest.json /home/ace/prjx/logix/tmp/03_visual-testing/code/web/icons/Icon-192.png /home/ace/prjx/logix/tmp/03_visual-testing/code/web/icons/Icon-512.png /home/ace/prjx/logix/tmp/03_visual-testing/code/web/index.html
