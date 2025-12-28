@@ -79,7 +79,7 @@ def test_rendering():
 
     # Test that page loads
     try:
-        response = urllib.request.urlopen(f"{url}/logix/index.html", timeout=5)
+        response = urllib.request.urlopen(f"{url}/skrolbak/index.html", timeout=5)
         html_content = response.read().decode('utf-8')
         assert len(html_content) > 0, "HTML content is empty"
         print("✓ Page loaded successfully")
@@ -127,7 +127,7 @@ def test_rendering():
         [
             './the-system/bin/uv.linux', 'run', '--script',
             './the-system/scripts/screenshot.py',
-            f"{url}/logix/index.html",
+            f"{url}/skrolbak/index.html",
             screenshot_path
         ],
         capture_output=True,

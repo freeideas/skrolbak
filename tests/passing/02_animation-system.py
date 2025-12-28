@@ -72,7 +72,7 @@ def test_initial_state():
     """Test that at T=0, all parameters are in their initial state."""
     # $REQ_ANIM_001
     driver = get_driver()
-    port = start_server('./released/logix')
+    port = start_server('./released/skrolbak')
     url = get_server_url(port)
 
     driver.get(url)
@@ -473,7 +473,7 @@ def test_debug_logging():
     })
 
     # Now navigate to the page
-    port = start_server('./released/logix')
+    port = start_server('./released/skrolbak')
     url = get_server_url(port)
     driver.get(url)
 

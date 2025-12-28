@@ -148,7 +148,7 @@ def main():
     tmp_dir.mkdir(exist_ok=True)
 
     # Start HTTP server
-    port = start_server(str(repo_root / "released" / "logix"))
+    port = start_server(str(repo_root / "released" / "skrolbak"))
     base_url = get_server_url(port)
 
     with sync_playwright() as p:
@@ -282,7 +282,7 @@ def main():
             'x-rot-min="0" x-rot-max="0" y-rot-min="0" y-rot-max="0" z-rot-min="0" z-rot-max="0" '
             'z-pan-min="100" z-pan-max="100"'
         )
-        test_path = repo_root / "released" / "logix" / "test_xpan.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_xpan.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_xpan.html")
@@ -305,7 +305,7 @@ def main():
             'x-rot-min="0" x-rot-max="0" y-rot-min="0" y-rot-max="0" z-rot-min="0" z-rot-max="0" '
             'z-pan-min="100" z-pan-max="100"'
         )
-        test_path = repo_root / "released" / "logix" / "test_ypan.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_ypan.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_ypan.html")
@@ -328,7 +328,7 @@ def main():
             'y-rot-min="0" y-rot-max="0" z-rot-min="0" z-rot-max="0" '
             'z-pan-min="100" z-pan-max="100"'
         )
-        test_path = repo_root / "released" / "logix" / "test_xrot.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_xrot.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_xrot.html")
@@ -352,7 +352,7 @@ def main():
             'z-rot-min="0" z-rot-max="0" '
             'z-pan-min="100" z-pan-max="100"'
         )
-        test_path = repo_root / "released" / "logix" / "test_yrot.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_yrot.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_yrot.html")
@@ -375,7 +375,7 @@ def main():
             'z-rot-min="-45" z-rot-max="45" '
             'z-pan-min="100" z-pan-max="100"'
         )
-        test_path = repo_root / "released" / "logix" / "test_zrot.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_zrot.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_zrot.html")
@@ -397,7 +397,7 @@ def main():
             'x-rot-min="0" x-rot-max="0" y-rot-min="0" y-rot-max="0" z-rot-min="0" z-rot-max="0" '
             'z-pan-min="50" z-pan-max="200"'
         )
-        test_path = repo_root / "released" / "logix" / "test_zoom.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_zoom.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_zoom.html")

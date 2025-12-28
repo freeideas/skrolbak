@@ -14,12 +14,12 @@ if sys.stdout.encoding != 'utf-8':
     sys.stderr.reconfigure(encoding='utf-8')
 
 def main():
-    print("Building Logix: Animated Background Component...")
+    print("Building Skrolbak: Animated Background Component...")
 
     # Determine paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    release_dir = os.path.join(project_root, 'released', 'logix')
+    release_dir = os.path.join(project_root, 'released', 'skrolbak')
 
     # Create release directory
     print(f"Creating release directory: {release_dir}")
@@ -43,7 +43,7 @@ def main():
 
         print(f"Copying {filename}...")
         shutil.copy2(src, dst)
-        print(f"  ✓ {filename} -> released/logix/")
+        print(f"  ✓ {filename} -> released/skrolbak/")
 
     print("\n✓ Build complete!")
     print(f"  Output: {release_dir}")

@@ -65,7 +65,7 @@ def main():
     tmp_dir.mkdir(exist_ok=True)
 
     # Start HTTP server
-    port = start_server(str(repo_root / "released" / "logix"))
+    port = start_server(str(repo_root / "released" / "skrolbak"))
     base_url = get_server_url(port)
 
     with sync_playwright() as p:
@@ -81,7 +81,7 @@ def main():
         # Test 1: Custom HTML Element
         print("Test 1: Custom HTML Element...")
         test_html = create_test_html('src="bg.jpg"')
-        test_path = repo_root / "released" / "logix" / "test_element.html"
+        test_path = repo_root / "released" / "skrolbak" / "test_element.html"
         test_path.write_text(test_html)
 
         page.goto(f"{base_url}/test_element.html")

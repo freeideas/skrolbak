@@ -53,7 +53,7 @@ def main():
         sys.exit(1)
 
     port = start_server(str(released_dir))
-    url = get_server_url(port) + '/logix/'
+    url = get_server_url(port) + '/skrolbak/'
 
     # Set up headless Chrome
     chrome_options = Options()

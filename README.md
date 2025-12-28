@@ -1,4 +1,4 @@
-# Logix: Animated Background Component
+# Skrolbak: Animated Background Component
 
 A Web Component featuring an infinite tiled background with organic camera motion across six degrees of freedom.
 
@@ -11,7 +11,7 @@ A Web Component featuring an infinite tiled background with organic camera motio
 
 ## Build
 
-Run `./code/build.py` to copy source to `./released/logix/`.
+Run `./code/build.py` to copy source to `./released/skrolbak/`.
 
 ## Specifications
 

@@ -26,7 +26,7 @@ atexit.register(stop_server)
 
 def main():
     # Start web server
-    port = start_server('./released/logix')
+    port = start_server('./released/skrolbak')
     url = get_server_url(port)
 
     # Install playwright browsers if needed
