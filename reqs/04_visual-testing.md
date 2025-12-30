@@ -42,22 +42,7 @@ When `rotY = 100` and all other ranges are set to 0, with `rotYVelocity = 20`, t
 
 When `rotZ = 100` and all other ranges are set to 0, with `rotZVelocity = 20`, the test must verify in-plane rotation only.
 
-## $REQ_VISTEST_009: Test Process Position Recording
-**Source:** ./specs/TESTING.md (Section: "Test Process")
+## $REQ_VISTEST_009: Deterministic Replay Test
+**Source:** ./specs/TESTING.md (Section: "Deterministic Replay Test")
 
-Each degree of freedom test must record initial position, take a screenshot, wait 1.5 seconds, record final position, and take another screenshot.
-
-## $REQ_VISTEST_010: Test Process Numerical Verification
-**Source:** ./specs/TESTING.md (Section: "Test Process")
-
-Each degree of freedom test must verify numerically that final position ≈ initial position + (velocity × 1.5 seconds).
-
-## $REQ_VISTEST_011: Test Process Visual Verification
-**Source:** ./specs/TESTING.md (Section: "Test Process")
-
-Each degree of freedom test must verify visually that the background moved as expected for that axis between the two screenshots.
-
-## $REQ_VISTEST_012: Success Criteria
-**Source:** ./specs/TESTING.md (Section: "Success Criteria")
-
-All tests pass when each isolated test shows only the expected motion between the two screenshots, and the deterministic replay test confirms matching positions.
+To verify that the `t` attribute fast-forward produces identical state to real-time animation: create element with all ranges at 100% and `t="0"`, wait 30 seconds, record all six position values, then create a new element with `t="29"`, wait 1 second, and verify all six position values match (within floating-point tolerance).
