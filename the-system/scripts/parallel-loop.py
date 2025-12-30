@@ -154,7 +154,7 @@ def get_reqs_needing_work() -> list[Path]:
         """Check if a requirement's test currently fails.
 
         Rule: Queue any test that is NOT in passing/.
-        This includes: missing tests, tests in failing/, tests in error/.
+        This includes: missing tests, tests in failing/.
         """
         test_path, status = report_utils.find_test_in_any_status(req_file.stem)
 
@@ -162,19 +162,11 @@ def get_reqs_needing_work() -> list[Path]:
         if test_path is None:
             return True
 
-        # If test is in error/, move it to failing/ for retry
-        if status == 'error':
-            try:
-                report_utils.move_test(req_file.stem, 'error', 'failing')
-                print(f"  Moved {req_file.stem} from error/ to failing/ (retry)")
-            except Exception as e:
-                print(f"  Warning: Could not move test: {e}")
-
         # If test is in passing/, don't queue it
         if status == 'passing':
             return False
 
-        # Test is in failing/ (or was just moved from error/), needs work
+        # Test is in failing/, needs work
         return True
 
     # Check build requirement FIRST - if it fails, only return that
@@ -297,7 +289,7 @@ def main() -> int:
     if reqs_dir.exists():
         _run_state['all_reqs'] = [f.stem for f in sorted(reqs_dir.glob('*.md'))]
 
-    # Ensure tests directories exist (failing/, passing/, error/)
+    # Ensure tests directories exist (failing/, passing/)
     report_utils.ensure_test_directories(Path('./tests'))
 
     # Ensure tmp directory exists

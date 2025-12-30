@@ -6,65 +6,19 @@
 
 ## Available Tools
 
-System-wide tools available in any directory:
-- `rg` (ripgrep) - Fast text search: `rg "pattern" --type py`
-- `jq` - JSON processor: `fd "*.json" | xargs jq .`
-- `fd` (fdfind) - Fast file finder
-- `bat` (batcat) - Enhanced cat with syntax highlighting
-- `tree` - Directory structure: `tree -L 2`
-- `xmlstarlet` - XML processing
-- `dos2unix` - Fix line endings
-- `file` - Determine file types
-- `git-extras` - Git utilities (git-flow, git-changelog, git-ignore, etc.)
-- `httpie` - Modern HTTP client: `http GET example.com`
-- `ncdu` - NCurses disk usage analyzer
-- `tldr` - Simplified man pages with practical examples
-- `fzf` - Fuzzy finder for terminal
-- `ag` (silversearcher) - Fast code searching tool
-- `docker` & `docker-compose` - Container tools
-- `go` - Go programming language
-- `rustc` & `cargo` - Rust programming language and package manager
-- `gh` - GitHub CLI
-- `uv` - Fast Python package manager and script runner
+Small CLI tools (apt): `rg`, `jq`, `fdfind`, `batcat`, `tree`, `xmlstarlet`, `dos2unix`, `file`, `http`, `ncdu`, `fzf`, `ag`, `gh`
 
-### Python Development
+**uv** (Python package manager): Use uv (which is often located at `./the-system/bin/uv.{linux,mac,exe}` based on platform). Never use `python` directly.
 
-**IMPORTANT: NEVER run Python scripts with `python script.py`. ALWAYS run them with uv:**
-- [OK] CORRECT: `uv run --script ./scripts/my_script.py`
-- [X] WRONG: `python scripts/my_script.py` or `python3 scripts/my_script.py`
-
-**All Python scripts MUST have this shebang as the first line:**
 ```python
 #!/usr/bin/env uvrun
 # /// script
 # requires-python = ">=3.8"
-# dependencies = [
-    # List PyPI packages here
-]
+# dependencies = []
 # ///
 ```
 
-**Key points:**
-- Scripts can use ANY PyPI package without pre-installation - just list it in dependencies
-- The script metadata block (`# /// script`) declares dependencies inline
-- Use `uv run` to execute Python scripts with automatic dependency management
-
-**When creating new Python scripts:**
-1. ALWAYS start with the `#!/usr/bin/env uvrun` shebang
-2. Add the script metadata block with dependencies
-3. Make the script executable: `chmod +x script.py`
-4. Run it directly: `./script.py` NOT `python script.py`
-
-### Node.js Tools (global npm packages)
-- `prettier` - Code formatter for JS/TS/CSS/etc
-- `eslint` - JavaScript linter
-- `typescript` - TypeScript compiler
-- `tsx` - TypeScript execute
-- `nodemon` - Auto-restart node apps
-- `pm2` - Process manager
-- `yarn`, `pnpm` - Alternative package managers
-
-**Note**: If you need any standard development tools that aren't listed above or that you discover are missing during your work, feel free to install them using the appropriate package manager (apt, pip, npm, etc.). This ensures you have all necessary tools to complete tasks efficiently.
+Run with: `./the-system/bin/uv.linux run --script ./script.py`
 
 **ALWAYS use ./tmp directory for temporary scripts:**
 

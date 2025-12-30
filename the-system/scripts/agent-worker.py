@@ -172,7 +172,7 @@ def main() -> int:
 
             # Find test file (might have been created in a different location)
             actual_test_path = None
-            for status in ['failing', 'passing', 'error']:
+            for status in ['failing', 'passing']:
                 candidate = sandbox_path / 'tests' / status / test_filename
                 if candidate.exists():
                     actual_test_path = candidate
@@ -211,7 +211,7 @@ def main() -> int:
 
         # Find test again (might have moved)
         actual_test_path = None
-        for status in ['failing', 'passing', 'error']:
+        for status in ['failing', 'passing']:
             candidate = sandbox_path / 'tests' / status / test_filename
             if candidate.exists():
                 actual_test_path = candidate

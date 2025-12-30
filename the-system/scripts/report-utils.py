@@ -93,7 +93,7 @@ def req_stem_from_test_path(test_path: Path) -> str:
 # ============================================================================
 
 # Valid test status directories
-TEST_STATUSES = ('failing', 'passing', 'error')
+TEST_STATUSES = ('failing', 'passing')
 
 
 def get_test_dir(status: str = 'failing', tests_base: Path | None = None) -> Path:
@@ -101,7 +101,7 @@ def get_test_dir(status: str = 'failing', tests_base: Path | None = None) -> Pat
     Get the test directory for a given status.
 
     Args:
-        status: Test status ('failing', 'passing', or 'error')
+        status: Test status ('failing' or 'passing')
         tests_base: Base tests directory (defaults to ./tests)
 
     Returns:
@@ -122,7 +122,7 @@ def get_test_path(req_stem: str, status: str = 'failing', tests_base: Path | Non
 
     Args:
         req_stem: Requirement file stem (e.g., "05_discovery-operations")
-        status: Test status ('failing', 'passing', or 'error')
+        status: Test status ('failing' or 'passing')
         tests_base: Base tests directory (defaults to ./tests)
 
     Returns:
@@ -143,13 +143,13 @@ def find_test_in_any_status(req_stem: str, tests_base: Path | None = None) -> tu
 
     Returns:
         Tuple of (path, status) if found, (None, None) if not found.
-        Status is 'passing', 'failing', or 'error'.
+        Status is 'passing' or 'failing'.
     """
     if tests_base is None:
         tests_base = Path('./tests')
 
-    # Search order: passing first (skip work), then failing, then error
-    for status in ('passing', 'failing', 'error'):
+    # Search order: passing first (skip work), then failing
+    for status in ('passing', 'failing'):
         test_path = get_test_path(req_stem, status, tests_base)
         if test_path.exists():
             return test_path, status
@@ -163,8 +163,8 @@ def move_test(req_stem: str, from_status: str, to_status: str, tests_base: Path 
 
     Args:
         req_stem: Requirement file stem (e.g., "05_discovery-operations")
-        from_status: Source status ('failing', 'passing', or 'error')
-        to_status: Destination status ('failing', 'passing', or 'error')
+        from_status: Source status ('failing' or 'passing')
+        to_status: Destination status ('failing' or 'passing')
         tests_base: Base tests directory (defaults to ./tests)
 
     Returns:
@@ -193,6 +193,14 @@ def move_test(req_stem: str, from_status: str, to_status: str, tests_base: Path 
 
     # Move the file
     from_path.rename(to_path)
+
+    # Defensive: ensure no duplicates exist in OTHER directories
+    for status in TEST_STATUSES:
+        if status != to_status:
+            other = get_test_path(req_stem, status, tests_base)
+            if other.exists():
+                other.unlink()
+                print(f"  Warning: Removed stale duplicate from {status}/")
 
     return to_path
 

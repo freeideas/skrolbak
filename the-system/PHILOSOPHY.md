@@ -11,6 +11,7 @@ This is a **minimal viable project**. We build only what is explicitly required:
 - **NO error handling** -- except where explicitly required
 - **NO gold plating** -- implement exactly what's written, nothing more
 - **NO historical baggage** -- documentation reflects current desired state only
+- **NO directory structures in docs** -- creates change dependencies, adds questionable value; the filesystem is the source of truth
 
 ## Requirements Are the Design
 

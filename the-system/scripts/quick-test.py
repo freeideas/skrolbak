@@ -43,21 +43,6 @@ run_script_module = import_script('run-script')
 run_script = run_script_module.run_script
 report_utils = import_script('report-utils')
 
-def run_cleanup():
-    """Run the cleanup script before testing."""
-    cleanup_script = Path('./the-system/scripts/cleanup.py')
-    if not cleanup_script.exists():
-        print(f"Warning: Cleanup script not found at {cleanup_script}")
-        return
-
-    print("Running cleanup...")
-    result = run_script(cleanup_script, timeout=30)
-    if not result['success']:
-        print(f"Warning: Cleanup exited with code {result['exit_code']}")
-        if result['stderr']:
-            print(result['stderr'])
-    print()
-
 def get_required_req_stems() -> set:
     """Get all requirement stems from ./reqs/"""
     reqs_dir = Path('./reqs')
@@ -172,9 +157,6 @@ def run_test(test_path: Path) -> Tuple[bool, str]:
     return passed, output
 
 def main():
-    # Run cleanup first
-    run_cleanup()
-
     # Check that all requirements have passing tests
     required_stems = get_required_req_stems()
     passing_stems = get_passing_test_stems()

@@ -9,3 +9,6 @@
 [branch "main"]
 	remote = origin
 	merge = refs/heads/main
+[user]
+	name = freeideas
+	email = freeideas@users.noreply.github.com

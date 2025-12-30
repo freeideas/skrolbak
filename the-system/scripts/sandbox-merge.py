@@ -6,6 +6,8 @@
 """
 Agent Sandbox with 3-Way Merge
 
+Also archives screenshots from sandbox tmp/ to reports/ with timestamps.
+
 Replaces git worktrees with a simpler copy-based approach:
 1. Copy project to sandbox, snapshot ./code/ state
 2. Agent works in sandbox
@@ -15,9 +17,13 @@ The sandbox is named after the requirement stem (e.g., ./tmp/00_build-output/).
 """
 
 import shutil
+from datetime import datetime
 from pathlib import Path
 from filelock import FileLock
 from merge3 import Merge3
+
+# Image file extensions to archive from tmp/
+IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg'}
 
 # Lock file for serializing merges from concurrent agents
 MERGE_LOCK = Path('./tmp/.code_merge.lock')
@@ -266,7 +272,7 @@ def copy_test_to_status(
     Args:
         sandbox: Path to agent's sandbox directory
         req_stem: The requirement stem (test filename without .py)
-        target_status: Target status directory ('passing', 'failing', or 'error')
+        target_status: Target status directory ('passing' or 'failing')
         project_root: Main project root (default: current directory)
     """
     if project_root is None:
@@ -277,7 +283,7 @@ def copy_test_to_status(
 
     # Find the test file in the sandbox (could be in any status subdir)
     sandbox_test = None
-    for status in ['failing', 'passing', 'error']:
+    for status in ['failing', 'passing']:
         candidate = sandbox / 'tests' / status / test_filename
         if candidate.exists():
             sandbox_test = candidate
@@ -288,7 +294,7 @@ def copy_test_to_status(
         return
 
     # Remove existing test from all status directories in main project
-    for status in ['failing', 'passing', 'error']:
+    for status in ['failing', 'passing']:
         existing = main_tests / status / test_filename
         if existing.exists():
             existing.unlink()
@@ -298,6 +304,15 @@ def copy_test_to_status(
     target_dir.mkdir(parents=True, exist_ok=True)
     target_file = target_dir / test_filename
     shutil.copy2(sandbox_test, target_file)
+
+    # Defensive: after copy, ensure no duplicates exist in OTHER directories
+    # This prevents race conditions or bugs from leaving stale copies
+    for status in ['failing', 'passing']:
+        if status != target_status:
+            other = main_tests / status / test_filename
+            if other.exists():
+                other.unlink()
+                print(f"  Warning: Removed stale duplicate from {status}/")
 
     print(f"  Moved test to {target_status}/: {test_filename}")
 
@@ -309,6 +324,42 @@ def cleanup_sandbox(sandbox: Path, base_snapshot: Path):
             shutil.rmtree(p, ignore_errors=True)
 
 
+def archive_tmp_images(sandbox: Path, project_root: Path = None):
+    """
+    Archive image files from sandbox's tmp/ to main reports/ with timestamps.
+
+    Images are renamed to: {timestamp}_{original_name}
+    where timestamp is derived from the file's modification time.
+    """
+    if project_root is None:
+        project_root = Path.cwd()
+
+    sandbox_tmp = sandbox / 'tmp'
+    main_reports = project_root / 'reports'
+
+    if not sandbox_tmp.exists():
+        return
+
+    main_reports.mkdir(parents=True, exist_ok=True)
+    archived_count = 0
+
+    for img_file in sandbox_tmp.iterdir():
+        if img_file.is_file() and img_file.suffix.lower() in IMAGE_EXTENSIONS:
+            # Use file modification time for timestamp
+            mtime = img_file.stat().st_mtime
+            timestamp = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d-%H-%M-%S-%f')[:-3]
+
+            # Create timestamped filename: {timestamp}_{original_name}
+            new_name = f"{timestamp}_{img_file.name}"
+            dest = main_reports / new_name
+
+            shutil.copy2(img_file, dest)
+            archived_count += 1
+
+    if archived_count > 0:
+        print(f"  Archived {archived_count} screenshot(s) from sandbox tmp/ to ./reports/")
+
+
 def copy_reports_from_sandbox(sandbox: Path, project_root: Path = None):
     """Copy any reports from sandbox to main project's reports directory."""
     if project_root is None:
@@ -317,11 +368,12 @@ def copy_reports_from_sandbox(sandbox: Path, project_root: Path = None):
     sandbox_reports = sandbox / 'reports'
     main_reports = project_root / 'reports'
 
-    if not sandbox_reports.exists():
-        return
+    if sandbox_reports.exists():
+        try:
+            shutil.copytree(sandbox_reports, main_reports, dirs_exist_ok=True, copy_function=shutil.copy2)
+            print("  Copied reports from sandbox to ./reports/")
+        except Exception as e:
+            print(f"  Warning: Failed to copy sandbox reports: {e}")
 
-    try:
-        shutil.copytree(sandbox_reports, main_reports, dirs_exist_ok=True, copy_function=shutil.copy2)
-        print("  Copied reports from sandbox to ./reports/")
-    except Exception as e:
-        print(f"  Warning: Failed to copy sandbox reports: {e}")
+    # Also archive any screenshots from sandbox's tmp/
+    archive_tmp_images(sandbox, project_root)

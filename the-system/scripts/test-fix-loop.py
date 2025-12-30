@@ -198,7 +198,7 @@ def prepare_tests() -> bool:
 
     # Ensure all status subdirectories exist
     report_utils.ensure_test_directories(tests_dir)
-    print("  OK Directories ready: ./tests/failing/, ./tests/passing/, ./tests/error/")
+    print("  OK Directories ready: ./tests/failing/, ./tests/passing/")
     print()
 
     print("Checking for orphan $REQ_IDs...")
@@ -241,7 +241,7 @@ def prepare_tests() -> bool:
     print("Cleaning orphan tests...")
     req_stems = {p.stem for p in Path('./reqs').glob('*.md')}
 
-    # Clean orphan tests from ALL status directories (failing, passing, error)
+    # Clean orphan tests from ALL status directories (failing, passing)
     if tests_dir.exists():
         for status in report_utils.TEST_STATUSES:
             status_dir = tests_dir / status

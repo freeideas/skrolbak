@@ -61,7 +61,7 @@ When you modify specs and re-run `software-construction.exe`:
 ### Why This Works
 
 **Verify-in-place pattern:**
-- Tests stay in their current directory (`passing/`, `failing/`, `error/`)
+- Tests stay in their current directory (`passing/`, `failing/`)
 - Each iteration re-runs `passing/` tests to catch regressions
 - Tests only move to `failing/` if they actually fail
 - Integration check runs all tests together after individual tests pass
@@ -79,29 +79,22 @@ When you modify specs and re-run `software-construction.exe`:
 
 The `the-system/` directory is identical across projects and should not be edited per-project. Copy it into any repo as `./the-system/` and use it as-is.
 
----
+### Git Management (`.disabled` prefix)
 
-## Directory Structure
+The `the-system/` directory has its own git repo for independent versioning, but git files are disabled by default to avoid conflicts with the parent project (`.disabled.git/`, `.disabled.gitignore`).
 
-```
-your-project/
-|-- README.md                    # You write: Overview, build info
-|-- specs/                       # You write: Workflows, concerns
-|-- docs/                        # You write (optional): Supporting docs, APIs, protocols
-|-- extart/                      # You provide (optional): External artifacts (libs, tools, data)
-|-- reqs/                        # AI generates: Testable requirements
-|-- code/                        # AI generates: Implementation
-|-- tests/                       # AI generates: Test suite
-|   |-- failing/                 # Tests in progress
-|   |-- passing/                 # Tests that pass
-|   \-- error/                   # Tests with errors
-|-- released/                    # Build produces: Final artifacts
-|-- reports/                     # AI writes: Operation reports
-|-- tmp/                         # Scripts create: Temp files, DB
-\-- the-system/                  # System files (copy this directory)
-    |-- scripts/                 # Orchestration scripts
-    \-- prompts/                 # AI prompts
-```
+**Why disabled:** The parent project has its own `.git/`. Nested git repos cause confusion for tools and AI agents.
+
+**To commit/push changes to the-system:**
+
+Use `./the-system/scripts/the-system_upload.py [commit message]` - it handles enable/disable automatically.
+
+Or manually:
+1. Rename to enable: `mv .disabled.git .git && mv .disabled.gitignore .gitignore`
+2. Commit and push as normal
+3. Rename to disable: `mv .git .disabled.git && mv .gitignore .disabled.gitignore`
+
+Keep git disabled during normal operation.
 
 ---
 
