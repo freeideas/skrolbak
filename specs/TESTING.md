@@ -55,7 +55,7 @@ Each degree of freedom is tested independently using this process:
 3. Set that axis position to 0 (center)
 4. Set that axis velocity to a significant value (e.g., 20% per second)
 5. Record initial position, take a screenshot
-6. Wait 1.5 seconds
+6. Wait 3 ticks (1.5 seconds)
 7. Record final position, take another screenshot
 8. Verify numerically: final position ≈ initial position + (velocity × 1.5)
 9. Verify visually: the background moved as expected for that axis
@@ -103,15 +103,15 @@ Verify that the `t` attribute fast-forward produces identical state to real-time
 
 **Test process:**
 1. Create element with all ranges at 100%, `t="0"`
-2. Wait 30 seconds (until console shows `t=30`)
+2. Wait 60 ticks (30 seconds, until console shows `t=60`)
 3. Record all position values: `panXPosition`, `panYPosition`, `panZPosition`, `rotXPosition`, `rotYPosition`, `rotZPosition`
-4. Remove element, create new element with same ranges but `t="29"`
-5. Wait 1 second (until console shows `t=30`)
+4. Remove element, create new element with same ranges but `t="59"`
+5. Wait 1 tick (until console shows `t=60`)
 6. Record all position values again
 7. Verify: all six position values match between step 3 and step 6 (within floating-point tolerance)
 
 **Why this works:**
-- Both paths reach t=30 with identical PRNG sequences
+- Both paths reach t=60 with identical PRNG sequences
 - If fast-forward simulation is correct, positions must be identical
 - Tests all six axes simultaneously
 

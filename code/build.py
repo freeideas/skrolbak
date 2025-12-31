@@ -15,46 +15,66 @@ if sys.stdout.encoding != 'utf-8':
     sys.stderr.reconfigure(encoding='utf-8')
 
 def main():
-    print("Building Skrolbak...")
+    """
+    Build Output Location
+    Copies source files to ./released/skrolbak/
+    """
 
-    # Get project root (parent of code/)
+    # Get the project root (parent of code directory)
     code_dir = Path(__file__).parent
     project_root = code_dir.parent
 
-    # $REQ_BUILD_001: Released Directory Contains Component Script
-    released_dir = project_root / 'released' / 'skrolbak'
+    # Define source and destination paths
+    output_dir = project_root / 'released' / 'skrolbak'
 
-    # Create released directory
-    print(f"Creating output directory: {released_dir}")
-    released_dir.mkdir(parents=True, exist_ok=True)
+    print('Skrolbak Build Script')
+    print('=' * 50)
 
-    # Copy JavaScript component
-    src_file = code_dir / 'animated-background.js'
-    dest_file = released_dir / 'animated-background.js'
-    print(f"Copying {src_file.name} to {released_dir}")
-    shutil.copy2(src_file, dest_file)
+    # Create output directory
+    print(f'Creating output directory: {output_dir}')
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Copy demo files
-    demo_file = code_dir / 'demo.html'
-    demo_dest = released_dir / 'demo.html'
-    print(f"Copying {demo_file.name} to {released_dir}")
-    shutil.copy2(demo_file, demo_dest)
+    # JavaScript Component Output
+    # Copy animated-background.js
+    src_js = code_dir / 'animated-background.js'
+    dst_js = output_dir / 'animated-background.js'
 
-    # Copy demo image from extart/
-    extart_dir = project_root / 'extart'
-    bg_src = extart_dir / 'bg.jpg'
-    bg_dest = released_dir / 'bg.jpg'
-    if bg_src.exists():
-        print(f"Copying {bg_src.name} to {released_dir}")
-        shutil.copy2(bg_src, bg_dest)
-    else:
-        print(f"Warning: {bg_src} not found, skipping")
+    if not src_js.exists():
+        print(f'ERROR: Source file not found: {src_js}')
+        return 1
 
-    print("\nBuild completed successfully!")
-    print(f"Output directory: {released_dir}")
-    print("\nContents:")
-    for item in sorted(released_dir.iterdir()):
-        print(f"  - {item.name}")
+    print(f'Copying {src_js.name} -> {dst_js}')
+    shutil.copy2(src_js, dst_js)
+
+    # Copy demo.html
+    src_html = code_dir / 'demo.html'
+    dst_html = output_dir / 'demo.html'
+
+    if not src_html.exists():
+        print(f'ERROR: Source file not found: {src_html}')
+        return 1
+
+    print(f'Copying {src_html.name} -> {dst_html}')
+    shutil.copy2(src_html, dst_html)
+
+    # Copy background image from extart
+    src_bg = project_root / 'extart' / 'bg.jpg'
+    dst_bg = output_dir / 'bg.jpg'
+
+    if not src_bg.exists():
+        print(f'ERROR: Background image not found: {src_bg}')
+        return 1
+
+    print(f'Copying {src_bg.name} -> {dst_bg}')
+    shutil.copy2(src_bg, dst_bg)
+
+    print('=' * 50)
+    print('Build completed successfully!')
+    print(f'Output: {output_dir}')
+    print('\nFiles created:')
+    print(f'  - animated-background.js')
+    print(f'  - demo.html')
+    print(f'  - bg.jpg')
 
     return 0
 

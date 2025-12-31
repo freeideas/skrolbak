@@ -8,6 +8,17 @@ The `<animated-background>` element is a custom HTML element that renders a tile
   - The specified image is tiled across this wall; the wall’s center aligns with the center of the image.  
   - The visible viewport corresponds to the browser window; animation is produced by transforming the wall, not the viewport.
 
+## Timing Model
+
+All time-based behavior uses a unified tick system:
+
+- **Tick interval:** 500ms (0.5 seconds)
+- **Tick counter (`t`):** Increments by 1 each tick
+- All discrete updates (velocity changes, boost decay, mouse sampling) occur once per tick
+- Position updates occur continuously (every animation frame)
+
+Other specs should reference this section rather than defining their own timing.
+
 ## Attributes
 
 All attributes are optional unless stated otherwise and use lowercase names consistent with custom element conventions.
@@ -26,7 +37,7 @@ All attributes are optional unless stated otherwise and use lowercase names cons
 - `t` (optional)
   - Type: non-negative integer, default 0.
   - Semantics: Starting tick for the animation's deterministic state.
-  - Behavior: When set to N > 0, the element instantly simulates N seconds of state evolution before beginning visible animation. See "Deterministic Randomness" in Animation model.
+  - Behavior: When set to N > 0, the element instantly simulates N ticks of state evolution before beginning visible animation. See "Deterministic Randomness" in Animation model.
 
 ### Range attributes (degrees of freedom)
 
@@ -111,9 +122,9 @@ Axes:
 
 ### Velocity evolution
 
-- Time discretization: velocity is updated once per second (when `t` increments).
+- Time discretization: velocity is updated once per tick (see Timing Model).
 - For each axis independently:
-  - At each one-second tick, the *magnitude* of the velocity is either increased by 1 percentage point per second or decreased by 1 percentage point per second.
+  - At each tick, the *magnitude* of the velocity is either increased by 1 percentage point or decreased by 1 percentage point.
   - The choice is determined by `prng(t, "{axis}-vel")` (see Deterministic Randomness), but the result must never be 0.
   - Direction (sign) is preserved except when reversed at range boundaries (see next section).  
 
@@ -139,7 +150,7 @@ All "random" choices must be deterministic and reproducible for debugging purpos
 
 **Time counter:**
 - A global tick counter `t` starts at the value of the `t` attribute (default 0) when the element connects.
-- `t` increments by 1 each second (at the same time as velocity updates).
+- `t` increments by 1 each tick (see Timing Model for tick interval).
 - On each tick, log to console: `t=0`, `t=1`, `t=2`, etc.
 
 **The `t` attribute:**
@@ -148,7 +159,7 @@ All "random" choices must be deterministic and reproducible for debugging purpos
   1. Simulate state from t=0 to t=N-1 without rendering (instant computation)
   2. For each simulated tick: apply velocity to position, check boundaries, update velocity magnitude
   3. Begin normal animation and console logging at t=N
-- This allows reproducing bug reports: setting `t="23"` starts the animation in the exact state it would have reached after 23 seconds.
+- This allows reproducing bug reports: setting `t="46"` starts the animation in the exact state it would have reached after 23 seconds (46 ticks × 500ms).
 
 **Seeded pseudo-random function:**
 - All random choices use a deterministic function `prng(t, salt) → boolean` where:
@@ -183,9 +194,9 @@ This section describes a possible normative processing model consistent with the
      - `rot-x`, `rot-y`, `rot-z` map to 3D rotations around the respective axes.  
    - The combined transform is applied to the wall element, using CSS transforms or equivalent.
 
-4. **Animation loop**  
+4. **Animation loop**
    - A time-based animation loop (for example, driven by `requestAnimationFrame`) integrates velocities over time to update current values along each axis.
-   - Once per second, a separate tick updates velocities (increase/decrease magnitude by 1% per second, skipping 0, and handling sign reversals at boundaries).  
+   - Once per tick (see Timing Model), a separate update changes velocities (increase/decrease magnitude by 1%, skipping 0, and handling sign reversals at boundaries).  
 
 ## Example usage
 

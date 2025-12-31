@@ -135,7 +135,8 @@ def find_test_in_any_status(req_stem: str, tests_base: Path | None = None) -> tu
     """
     Find a test file in any status directory.
 
-    Searches in order: passing, failing, error.
+    passing/ is the source of truth. If a test exists in passing/, any stale
+    copy in failing/ is automatically cleaned up.
 
     Args:
         req_stem: Requirement file stem (e.g., "05_discovery-operations")
@@ -148,11 +149,16 @@ def find_test_in_any_status(req_stem: str, tests_base: Path | None = None) -> tu
     if tests_base is None:
         tests_base = Path('./tests')
 
-    # Search order: passing first (skip work), then failing
-    for status in ('passing', 'failing'):
-        test_path = get_test_path(req_stem, status, tests_base)
-        if test_path.exists():
-            return test_path, status
+    passing_path = tests_base / 'passing' / f"{req_stem}.py"
+    failing_path = tests_base / 'failing' / f"{req_stem}.py"
+
+    if passing_path.exists():
+        # Clean up any stale failing copy
+        failing_path.unlink(missing_ok=True)
+        return passing_path, 'passing'
+
+    if failing_path.exists():
+        return failing_path, 'failing'
 
     return None, None
 
@@ -160,6 +166,9 @@ def find_test_in_any_status(req_stem: str, tests_base: Path | None = None) -> tu
 def move_test(req_stem: str, from_status: str, to_status: str, tests_base: Path | None = None) -> Path:
     """
     Move a test file from one status directory to another.
+
+    Note: Duplicate cleanup is handled by find_test_in_any_status(), which
+    proactively removes failing/ copies when a passing/ version exists.
 
     Args:
         req_stem: Requirement file stem (e.g., "05_discovery-operations")
@@ -191,16 +200,8 @@ def move_test(req_stem: str, from_status: str, to_status: str, tests_base: Path 
     # Ensure destination directory exists
     to_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Move the file
-    from_path.rename(to_path)
-
-    # Defensive: ensure no duplicates exist in OTHER directories
-    for status in TEST_STATUSES:
-        if status != to_status:
-            other = get_test_path(req_stem, status, tests_base)
-            if other.exists():
-                other.unlink()
-                print(f"  Warning: Removed stale duplicate from {status}/")
+    # Move the file (overwrites if destination exists)
+    from_path.replace(to_path)
 
     return to_path
 

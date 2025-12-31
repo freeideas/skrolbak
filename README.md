@@ -16,5 +16,6 @@ Run `./code/build.py` to copy source to `./released/skrolbak/`.
 ## Specifications
 
 - [Animated Background](./specs/ANIMATED_BACKGROUND.md) - Component behavior and rendering
+- [Boost](./specs/BOOST.md) - Additional velocity with decay
 - [Demo](./specs/DEMO.md) - Test overlay
 - [Testing](./specs/TESTING.md) - Visual verification

@@ -76,6 +76,25 @@ Exit codes: 0=match, 1=no match, 2=error. The script handles all AI interaction 
 
 Exit codes: 0=assertion holds, 1=assertion violated. **Only use when:** (1) behavioral testing isn't practical, (2) the assertion is objectively verifiable — not subjective. Good: "uses async I/O", "no mutable static state". Bad: "efficient code", "clean architecture".
 
+## Installing Test Tools
+
+If you need additional testing tools, install them into `./tools/`. Prefer portable installations when available, but use non-portable (system) installation if necessary.
+
+**Browser UI testing:** If the project has a browser-based UI, use Playwright for testing. Install it as a uv dependency in your test script:
+
+```python
+# /// script
+# requires-python = ">=3.8"
+# dependencies = ["playwright"]
+# ///
+```
+
+Then install browser binaries (one-time setup):
+
+```bash
+{{UV_BINARY}} run playwright install
+```
+
 ## What You Can Modify
 
 - `./code/*` -- implementation files

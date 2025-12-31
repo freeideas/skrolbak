@@ -3,117 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skrolbak Demo</title>
+  <title>Animated Background Demo</title>
   <style>
-    body, html {
+    /* $REQ_DEMO_FORM_001: Glassmorphic Visual Style */
+    /* $REQ_DEMO_FORM_002: Centered Placement */
+    /* $REQ_DEMO_FORM_003: Foreground Layering */
+    body {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     }
 
-    /* $REQ_DEMO_FORM_001: Form Positioning */
-    /* $REQ_DEMO_FORM_002: Glassmorphic Appearance */
     .demo-form {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 100;
+      z-index: 1000;
 
-      /* Hot-pink with 50% opacity */
-      background: rgba(255, 105, 180, 0.5);
+      /* Glassmorphic styling */
+      background: rgba(255, 20, 147, 0.5); /* Hot pink with 50% opacity */
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
       padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-
-      min-width: 300px;
+      width: 320px;
     }
 
-    /* $REQ_DEMO_FORM_003: Form Elements */
+    /* $REQ_DEMO_FORM_004: Form Elements */
     .demo-form h1 {
-      margin: 0 0 30px 0;
+      margin: 0 0 24px 0;
       color: white;
       font-size: 28px;
       text-align: center;
     }
 
-    .demo-form input[type="text"] {
-      width: 100%;
-      padding: 12px;
+    .demo-form .form-group {
       margin-bottom: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    .demo-form input[type="text"]::placeholder {
-      color: rgba(255, 255, 255, 0.7);
     }
 
     .demo-form label {
+      display: block;
+      margin-bottom: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .demo-form input[type="text"],
+    .demo-form input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .demo-form input[type="text"]::placeholder,
+    .demo-form input[type="password"]::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .demo-form input[type="text"]:focus,
+    .demo-form input[type="password"]:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .demo-form .checkbox-group {
       display: flex;
       align-items: center;
-      color: white;
-      margin-bottom: 20px;
-      cursor: pointer;
+      gap: 8px;
+      margin-bottom: 24px;
     }
 
     .demo-form input[type="checkbox"] {
-      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .demo-form .checkbox-group label {
+      margin: 0;
       cursor: pointer;
     }
 
     .demo-form button {
       width: 100%;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 14px;
+      border: none;
       border-radius: 8px;
-      color: white;
+      background: rgba(255, 255, 255, 0.9);
+      color: #ff1493;
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.2s;
     }
 
     .demo-form button:hover {
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .demo-form button:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
 <body>
+  <!-- $REQ_ABC_006: Script Include Usage -->
+  <script src="animated-background.js"></script>
+
+  <!-- Use the animated background component with all degrees of freedom enabled -->
   <animated-background
     src="bg.jpg"
     pan-x="100"
-    pan-y="75"
+    pan-y="100"
     pan-z="50"
-    rot-x="50"
-    rot-y="100"
-    rot-z="25">
+    rot-x="30"
+    rot-y="30"
+    rot-z="20">
   </animated-background>
 
-  <!-- $REQ_DEMO_FORM_003: Form Elements -->
-  <!-- $REQ_DEMO_FORM_006: Display-Only Form -->
+  <!-- $REQ_DEMO_FORM_008: Form Stationary During Animation -->
+  <!-- $REQ_DEMO_FORM_005: Display Only -->
   <div class="demo-form">
-    <h1>Welcome</h1>
-    <input type="text" placeholder="Username" />
-    <label>
-      <input type="checkbox" />
-      Remember me
-    </label>
-    <button type="button">Sign In</button>
+    <h1>Login</h1>
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="remember">
+        <label for="remember">Remember me</label>
+      </div>
+      <button type="submit">Sign In</button>
+    </form>
   </div>
-
-  <script src="animated-background.js"></script>
 </body>
 </html>

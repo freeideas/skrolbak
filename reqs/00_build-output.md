@@ -1,6 +1,5 @@
 # Build Requirements
 
-## $REQ_BUILD_001: Released Directory Contains Component Script
-**Source:** ./README.md (Section: "Build", "Usage")
+Requirements for the build output.
 
-Running `./code/build.py` must produce `./released/skrolbak/animated-background.js`.
+*No requirements. Build processes and tooling are not tested as delivered software behavior.*
