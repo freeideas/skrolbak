@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drift Background Demo</title>
+  <style>
+    /* Reset and full-viewport background */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Background fills viewport */
+    drift-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Glassmorphic form styling - $REQ_DEMO_FORM_001 */
+    .form-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 320px;
+      padding: 40px;
+      background: rgba(255, 20, 147, 0.5); /* Hot pink with 50% opacity - $REQ_DEMO_FORM_001 */
+      backdrop-filter: blur(10px); /* $REQ_DEMO_FORM_001 */
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      pointer-events: none; /* $REQ_TESTMETH_008: Allow mouse events to pass through to canvas */
+    }
+
+    .form-container.hidden {
+      display: none;
+    }
+
+    /* Form elements styling */
+    .form-container h1 {
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      /* $REQ_TESTMETH_008: Title is display-only, inherits pointer-events: none from parent */
+    }
+
+    .form-container input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      pointer-events: auto; /* $REQ_TESTMETH_008: Re-enable pointer events on form elements */
+    }
+
+    .form-container input[type="email"]::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Error message styling */
+    .error-message {
+      color: #ff6b6b;
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+      margin-bottom: 16px;
+      min-height: 16px;
+      /* $REQ_TESTMETH_008: Error message is display-only, inherits pointer-events: none from parent */
+    }
+
+    /* Checkbox styling */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      pointer-events: auto; /* $REQ_TESTMETH_008: Re-enable pointer events on form elements */
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .checkbox-container label {
+      color: white;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Submit button styling */
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      transition: background 0.3s;
+      pointer-events: auto; /* $REQ_TESTMETH_008: Re-enable pointer events on form elements */
+    }
+
+    .form-container button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Success panel styling - $REQ_DEMO_FORM_006 */
+    .success-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 320px; /* $REQ_DEMO_FORM_006: Same size as form */
+      padding: 40px;
+      background: rgba(255, 20, 147, 0.5); /* $REQ_DEMO_FORM_006: Same hot pink glassmorphic styling */
+      backdrop-filter: blur(10px); /* $REQ_DEMO_FORM_006 */
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: none;
+    }
+
+    .success-panel.visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-panel p { /* $REQ_DEMO_FORM_007 */
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      text-align: center; /* $REQ_DEMO_FORM_007 */
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated background component -->
+  <drift-bg src="bg.jpg"></drift-bg>
+
+  <!-- Login form - $REQ_DEMO_FORM_002 -->
+  <div class="form-container" id="loginForm">
+    <h1>Login</h1> <!-- $REQ_DEMO_FORM_002 -->
+    <input type="email" id="emailInput" placeholder="Enter your email" /> <!-- $REQ_DEMO_FORM_002 -->
+    <div class="error-message" id="errorMessage"></div> <!-- $REQ_DEMO_FORM_004 -->
+    <div class="checkbox-container">
+      <input type="checkbox" id="rememberMe" /> <!-- $REQ_DEMO_FORM_002 -->
+      <label for="rememberMe">Remember me</label>
+    </div>
+    <button id="submitBtn">Submit</button> <!-- $REQ_DEMO_FORM_002 -->
+  </div>
+
+  <!-- Success panel - $REQ_DEMO_FORM_005, $REQ_DEMO_FORM_007 -->
+  <div class="success-panel" id="successPanel">
+    <p>(Your App Here)</p> <!-- $REQ_DEMO_FORM_007 -->
+  </div>
+
+  <!-- Load animated background component -->
+  <script src="animated-background.js"></script>
+
+  <!-- Form validation and interaction logic -->
+  <script>
+    const emailInput = document.getElementById('emailInput');
+    const errorMessage = document.getElementById('errorMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const loginForm = document.getElementById('loginForm');
+    const successPanel = document.getElementById('successPanel');
+
+    submitBtn.addEventListener('click', () => {
+      const email = emailInput.value;
+
+      // $REQ_DEMO_FORM_003: Validate email contains @ character
+      if (!email.includes('@')) {
+        // $REQ_DEMO_FORM_004: Show error message for invalid email
+        errorMessage.textContent = 'Please enter a valid email address';
+      } else {
+        // $REQ_DEMO_FORM_005: Hide form and show success panel
+        loginForm.classList.add('hidden');
+        successPanel.classList.add('visible');
+      }
+    });
+
+    // Clear error message when user types
+    emailInput.addEventListener('input', () => {
+      errorMessage.textContent = '';
+    });
+  </script>
+</body>
+</html>
